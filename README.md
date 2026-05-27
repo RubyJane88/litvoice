@@ -13,9 +13,7 @@ Try it:
 
 ```bash
 curl http://localhost:3000/healthz
-<!-- daloy-minimal:strip-start books -->
-curl http://localhost:3000/books/1
-<!-- daloy-minimal:strip-end books -->
+
 ```
 
 <!-- daloy-minimal:strip-start docs -->
@@ -59,9 +57,6 @@ TypeScript resolves the `.js` specifier to the matching `.ts` file at typecheck,
 ## What's included
 
 - `@daloyjs/core` with starter security middleware: `secureHeaders`, `requestId`, and `rateLimit`.
-<!-- daloy-minimal:strip-start books -->
-- A health route and a contract-first `/books/:id` route with Zod validation.
-<!-- daloy-minimal:strip-end books -->
 - Hardened `.npmrc` for safer installs.
 - Hey API codegen wired to `pnpm gen`.
 
