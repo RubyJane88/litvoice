@@ -6,10 +6,13 @@ import {
   secureHeaders,
 } from "@daloyjs/core";
 
+import {registerBooksRoutes} from "./modules/books/books.routes.js";
+
+
 export function buildApp(): App {
   const app = new App({
     bodyLimitBytes: 1024 * 1024,
-    requestTimeoutMs: 5_000,
+    requestTimeoutMs: 15_000,
     production: process.env.NODE_ENV === "production",
     openapi: {
       servers: [{ url: `http://localhost:${process.env.PORT ?? 3000}` }],
@@ -20,6 +23,8 @@ export function buildApp(): App {
   app.use(requestId());
   app.use(secureHeaders());
   app.use(rateLimit({ windowMs: 60_000, max: 120 }));
+  
+  registerBooksRoutes(app);
 
   app.route({
     method: "GET",
