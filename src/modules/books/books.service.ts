@@ -1,6 +1,5 @@
-import {searchBooks, getBook} from '../../lib/openlibrary.js';
-import {BookSchema, SearchResultSchema} from './books.schema.js';
-
+import { getBook, searchBooks } from "../../lib/openlibrary.js";
+import { BookSchema, SearchResultSchema } from "./books.schema.js";
 
 export async function searchBooksService(query: string, limit = 10) {
   const raw = await searchBooks(query, limit);

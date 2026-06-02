@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { NotFoundError, BadRequestError } from "@daloyjs/core";
+import { NotFoundError } from "@daloyjs/core";
 import type { App } from "@daloyjs/core";
 import { searchBooksService, getBookService } from "./books.service.js";
 import { BookSchema, SearchResultSchema } from "./books.schema.js";
@@ -11,10 +11,12 @@ export function registerBooksRoutes(app: App): void {
     operationId: "searchBooks",
     tags: ["Books"],
     request: {
-      query: z.object({
-        q: z.string().min(1),
-        limit: z.coerce.number().min(1).max(50).optional(),
-      }).strict(),
+      query: z
+        .object({
+          q: z.string().min(1),
+          limit: z.coerce.number().min(1).max(50).optional(),
+        })
+        .strict(),
     },
     responses: {
       200: { description: "Search results", body: SearchResultSchema },
@@ -42,8 +44,11 @@ export function registerBooksRoutes(app: App): void {
       try {
         const book = await getBookService(params.olid);
         return { status: 200 as const, body: book };
-      } catch {
-        throw new NotFoundError(`Book ${params.olid} not found`);
+      } catch (err) {
+        const status = (err as { status?: number }).status;
+        if (status === 404)
+          throw new NotFoundError(`Book with OLID ${params.olid} not found`);
+        throw err;
       }
     },
   });

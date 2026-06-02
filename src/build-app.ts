@@ -6,13 +6,13 @@ import {
   secureHeaders,
 } from "@daloyjs/core";
 
-import {registerBooksRoutes} from "./modules/books/books.routes.js";
+import { registerBooksRoutes } from "./modules/books/books.routes.js";
 
 
 export function buildApp(): App {
   const app = new App({
     bodyLimitBytes: 1024 * 1024,
-    requestTimeoutMs: 15_000,
+    requestTimeoutMs: Number (process.env.REQUEST_TIMEOUT_MS ?? 5_000),
     production: process.env.NODE_ENV === "production",
     openapi: {
       servers: [{ url: `http://localhost:${process.env.PORT ?? 3000}` }],
