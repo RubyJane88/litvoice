@@ -6,11 +6,9 @@ litvoice-web/node_modules/
 litvoice-api/.env
 litvoice-api/.env.*
 !litvoice-api/.env.example
-
 litvoice-web/.env
 litvoice-web/.env.*
 !litvoice-web/.env.example
-
 
 # Build outputs
 litvoice-api/dist/
