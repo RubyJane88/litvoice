@@ -41,7 +41,7 @@ describe("GET /books/search", () => {
   });
 });
 
-describe("GET /books/:olid", () => {
+describe("Books routes", () => {
   it("returns 404 for a nonexistent olid", async () => {
     const res = await app.request("/books/INVALID000");
     assert.equal(res.status, 404);
