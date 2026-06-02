@@ -20,7 +20,7 @@ export function registerBooksRoutes(app: App): void {
     },
     responses: {
       200: { description: "Search results", body: SearchResultSchema },
-      400: { description: "Bad request" },
+      422: { description: "Validation error" },
     },
     handler: async ({ query }) => {
       const results = await searchBooksService(query.q, query.limit);
