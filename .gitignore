@@ -2,10 +2,15 @@
 litvoice-api/node_modules/
 litvoice-web/node_modules/
 
-# Environment files
+# Environment files for api and web — keep local secrets out of Git, but allow example files for reference
 litvoice-api/.env
 litvoice-api/.env.*
 !litvoice-api/.env.example
+
+litvoice-web/.env
+litvoice-web/.env.*
+!litvoice-web/.env.example
+
 
 # Build outputs
 litvoice-api/dist/
