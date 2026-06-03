@@ -1,15 +1,33 @@
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
-export async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
-    const response  = await fetch (`${import.meta.env.VITE_API_BASE_URL ?? '/api'}${url}`, options);
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new ApiError(response.status, errorText);
-    }
-    return response.json() as Promise<T>;
+export async function apiFetch<T>(
+  url: string,
+  options?: RequestInit,
+): Promise<T> {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || "/api";
+  const response = await fetch(`${baseUrl}${url}`, options);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new ApiError(response.status, errorText);
+  }
+
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    const preview = (await response.text()).slice(0, 120);
+    throw new ApiError(
+      response.status,
+      `Expected JSON but got ${contentType || "unknown content type"}: ${preview}`,
+    );
+  }
+
+  return response.json() as Promise<T>;
 }
