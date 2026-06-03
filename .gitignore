@@ -10,6 +10,11 @@ litvoice-web/.env
 litvoice-web/.env.*
 !litvoice-web/.env.example
 
+litvoice-web/.env
+litvoice-web/.env.*
+!litvoice-web/.env.example
+
+
 # Build outputs
 litvoice-api/dist/
 litvoice-web/dist/
