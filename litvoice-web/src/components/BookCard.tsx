@@ -25,7 +25,7 @@ export function BookCard({ book }: Props) {
       </div>
       <CardContent className="p-0 flex flex-col gap-1">
         <p className="font-semibold leading-tight">{book.title}</p>
-        {book.author_name && (
+        {book.author_name?.[0] && (
           <p className="text-sm text-muted-foreground">
             {book.author_name[0]}
           </p>

@@ -3,7 +3,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { BookCard } from "@/components/BookCard";
 import { searchBooks } from "@/lib/books";
 import type { Book } from "@/lib/books";
-import { ErrorBoundary } from "@/components/ErrorBoundary.js";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export function Home() {
   const [results, setResults] = useState<Book[]>([]);

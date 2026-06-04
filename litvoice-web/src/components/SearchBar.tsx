@@ -10,7 +10,7 @@ type Props = {
 export function SearchBar({ onSearch, loading }: Props) {
   const [query, setQuery] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.BaseSyntheticEvent) {
     e.preventDefault();
     if (query.trim()) onSearch(query.trim());
   }

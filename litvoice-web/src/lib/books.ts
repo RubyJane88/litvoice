@@ -1,4 +1,4 @@
-import type { operations } from "./schema.d";
+import type { operations } from "./schema";
 import { apiFetch } from "./api";
 
 export type SearchResult =

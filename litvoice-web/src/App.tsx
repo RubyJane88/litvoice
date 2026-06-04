@@ -1,5 +1,5 @@
 import { Home } from "./pages/Home";
-import { ErrorBoundary } from "@/components/ErrorBoundary.js";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 function App() {
   return (
