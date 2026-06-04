@@ -35,16 +35,20 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback ?? (
-          <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-4">
+          <div
+            role="alert"
+            className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-4">
             <h1 className="text-2xl font-bold">Something went wrong</h1>
             <p className="text-sm text-muted-foreground">
               A UI error occurred. You can retry without reloading the page.
             </p>
             {import.meta.env.DEV && this.state.errorMessage && (
-              <p className="text-sm text-destructive">{this.state.errorMessage}</p>
+              <p className="text-sm text-destructive">
+                {this.state.errorMessage}
+              </p>
             )}
             <Button onClick={this.handleRetry}>Retry</Button>
-          </main>
+          </div>
         )
       );
     }

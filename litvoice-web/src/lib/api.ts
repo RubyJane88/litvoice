@@ -12,7 +12,8 @@ export async function apiFetch<T>(
   url: string,
   options?: RequestInit,
 ): Promise<T> {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || "/api";
+  const rawBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || "/api";
+  const baseUrl = rawBaseUrl.replace(/\/+$/, "");
   const response = await fetch(`${baseUrl}${url}`, options);
 
   if (!response.ok) {
