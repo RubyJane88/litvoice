@@ -1,5 +1,5 @@
-import type { operations } from "./schema.d.js";
-import { apiFetch } from "./api.js";
+import type { operations } from "./schema.d";
+import { apiFetch } from "./api";
 
 export type SearchResult =
   operations["searchBooks"]["responses"][200]["content"]["application/json"];

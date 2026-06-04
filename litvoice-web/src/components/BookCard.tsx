@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card.js";
-import { coverUrl } from "@/lib/books.js";
-import type { Book } from "@/lib/books.js";
+import { Card, CardContent } from "@/components/ui/card";
+import { coverUrl } from "@/lib/books";
+import type { Book } from "@/lib/books";
 
 type Props = {
   book: Book;

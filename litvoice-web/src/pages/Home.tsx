@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
-import { SearchBar } from "@/components/SearchBar.js";
-import { BookCard } from "@/components/BookCard.js";
-import { searchBooks } from "@/lib/books.js";
-import type { Book } from "@/lib/books.js";
+import { SearchBar } from "@/components/SearchBar";
+import { BookCard } from "@/components/BookCard";
+import { searchBooks } from "@/lib/books";
+import type { Book } from "@/lib/books";
+import { ErrorBoundary } from "@/components/ErrorBoundary.js";
 
 export function Home() {
   const [results, setResults] = useState<Book[]>([]);
@@ -41,13 +42,15 @@ export function Home() {
         <p className="text-sm text-muted-foreground">No results found.</p>
       )}
       {!loading && results.length > 0 && (
-        <ul className="flex flex-col gap-3">
-          {results.map((book) => (
-            <li key={book.key}>
-              <BookCard book={book} />
-            </li>
-          ))}
-        </ul>
+        <ErrorBoundary>
+          <ul className="flex flex-col gap-3">
+            {results.map((book) => (
+              <li key={book.key}>
+                <BookCard book={book} />
+              </li>
+            ))}
+          </ul>
+        </ErrorBoundary>
       )}
     </main>
   );

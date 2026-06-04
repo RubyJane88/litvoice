@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input.js";
-import { Button } from "@/components/ui/button.js";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   onSearch: (query: string) => void;
@@ -22,6 +22,7 @@ export function SearchBar({ onSearch, loading }: Props) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for a book..."
         disabled={loading}
+        aria-label="Search for a book"
       />
       <Button type="submit" disabled={loading || !query.trim()}>
         {loading ? "Searching…" : "Search"}
