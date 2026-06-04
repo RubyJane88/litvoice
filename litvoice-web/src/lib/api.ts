@@ -15,13 +15,17 @@ export async function apiFetch<T>(
   const rawBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || "/api";
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
   const response = await fetch(`${baseUrl}${url}`, options);
+  const contentType = response.headers.get("content-type") ?? "";
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new ApiError(response.status, errorText);
+    const bodyPreview = (await response.text()).slice(0, 500);
+    const message = contentType.includes("application/json")
+      ? bodyPreview || `Request failed with status ${response.status}`
+      : `Request failed with status ${response.status}`;
+
+    throw new ApiError(response.status, message);
   }
 
-  const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
     const preview = (await response.text()).slice(0, 120);
     throw new ApiError(
