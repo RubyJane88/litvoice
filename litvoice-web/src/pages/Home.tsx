@@ -4,6 +4,7 @@ import { BookCard } from "@/components/BookCard";
 import { searchBooks } from "@/lib/books";
 import type { Book } from "@/lib/books";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { BookCardSkeleton } from "@/components/BookCardSkeleton";
 
 export function Home() {
   const [results, setResults] = useState<Book[]>([]);
@@ -37,7 +38,15 @@ export function Home() {
       <h1 className="text-2xl font-bold">LitVoice</h1>
       <SearchBar onSearch={handleSearch} loading={loading} />
       {error && <p className="text-sm text-destructive">{error}</p>}
-      {loading && <p className="text-sm text-muted-foreground">Searching…</p>}
+      {loading && (
+        <ul className="flex flex-col gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <li key={i}>
+              <BookCardSkeleton />
+            </li>
+          ))}
+        </ul>
+      )}
       {!loading && searched && results.length === 0 && !error && (
         <p className="text-sm text-muted-foreground">No results found.</p>
       )}
