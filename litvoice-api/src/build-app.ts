@@ -1,18 +1,12 @@
 import { z } from "zod";
-import {
-  App,
-  rateLimit,
-  requestId,
-  secureHeaders,
-} from "@daloyjs/core";
+import { App, rateLimit, requestId, secureHeaders } from "@daloyjs/core";
 
 import { registerBooksRoutes } from "./modules/books/books.routes.js";
-
 
 export function buildApp(): App {
   const app = new App({
     bodyLimitBytes: 1024 * 1024,
-    requestTimeoutMs: Number (process.env.REQUEST_TIMEOUT_MS ?? 5_000),
+    requestTimeoutMs: Number(process.env.REQUEST_TIMEOUT_MS ?? 10_000),
     production: process.env.NODE_ENV === "production",
     openapi: {
       servers: [{ url: `http://localhost:${process.env.PORT ?? 3000}` }],
@@ -23,7 +17,7 @@ export function buildApp(): App {
   app.use(requestId());
   app.use(secureHeaders());
   app.use(rateLimit({ windowMs: 60_000, max: 120 }));
-  
+
   registerBooksRoutes(app);
 
   app.route({
