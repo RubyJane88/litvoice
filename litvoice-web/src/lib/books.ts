@@ -1,6 +1,9 @@
 import type { operations } from "./schema";
 import { apiFetch } from "./api";
 
+export type BookDetail =
+  operations["getBookById"]["responses"][200]["content"]["application/json"];
+
 export type SearchResult =
   operations["searchBooks"]["responses"][200]["content"]["application/json"];
 
@@ -18,6 +21,6 @@ export async function searchBooks(
   return apiFetch<SearchResult>(`/books/search?${params}`);
 }
 
-export async function getBook(olid: string): Promise<Book> {
-  return apiFetch<Book>(`/books/${olid}`);
+export async function getBook(olid: string): Promise<BookDetail> {
+  return apiFetch<BookDetail>(`/books/${olid}`);
 }

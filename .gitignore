@@ -1,3 +1,6 @@
+# macOS
+.DS_Store
+
 # Dependencies
 litvoice-api/node_modules/
 litvoice-web/node_modules/
@@ -6,6 +9,9 @@ litvoice-web/node_modules/
 litvoice-api/.env
 litvoice-api/.env.*
 !litvoice-api/.env.example
+litvoice-web/.env
+litvoice-web/.env.*
+!litvoice-web/.env.example
 
 litvoice-web/.env
 litvoice-web/.env.*
@@ -19,6 +25,7 @@ litvoice-web/dist/
 # Local only
 AI_WORKFLOW.md
 ROADMAP.md
+SPRINTBOARD.md
 instructions for you claude.md
 .debug-devtools-todo.md
 .debug-react-state-todo.md
