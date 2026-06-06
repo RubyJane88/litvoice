@@ -26,7 +26,7 @@ function App() {
             path="/books/:olid"
             element={
               <ErrorBoundary>
-                <Suspense>
+                <Suspense fallback={<div className="px-4 py-8 text-sm text-muted-foreground"><p>Loading...</p></div>}>
                   <BookDetail />
                 </Suspense>
               </ErrorBoundary>

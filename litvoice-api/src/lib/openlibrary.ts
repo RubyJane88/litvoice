@@ -1,7 +1,8 @@
 const BASE_URL = "https://openlibrary.org";
-const OPENLIBRARY_TIMEOUT_MS = Number(
-  process.env.OPENLIBRARY_TIMEOUT_MS ?? 4_000,
-);
+const OPENLIBRARY_TIMEOUT_MS = (() => {
+  const raw = Number(process.env.OPENLIBRARY_TIMEOUT_MS ?? 4_000);
+  return Number.isFinite(raw) ? raw : 4_000;
+})();
 
 export class OpenLibraryError extends Error {
   constructor(

@@ -23,5 +23,5 @@ export async function searchBooks(
 }
 
 export async function getBook(olid: string): Promise<BookDetail> {
-  return apiFetch<Book>(`/books/${olid}`);
+  return apiFetch<BookDetail>(`/books/${olid}`);
 }

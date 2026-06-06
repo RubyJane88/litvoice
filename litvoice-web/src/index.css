@@ -66,7 +66,7 @@
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(35% 0.08 155);            /* forest border #2D5A3D */
     --input: oklch(62% 0.12 65);             /* darker forest */
-    --ring:             /* amber focus ring */
+    --ring: oklch(62% 0.12 65);             /* amber focus ring */
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
