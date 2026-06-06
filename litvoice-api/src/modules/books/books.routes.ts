@@ -25,8 +25,14 @@ export function registerBooksRoutes(app: App): void {
     responses: {
       200: { description: "Search results", body: SearchResultSchema },
       422: { description: "Validation error" },
-      503: { description: "Upstream service unavailable", body: UpstreamErrorSchema },
-      504: { description: "Upstream request timed out", body: UpstreamErrorSchema },
+      503: {
+        description: "Upstream service unavailable",
+        body: UpstreamErrorSchema,
+      },
+      504: {
+        description: "Upstream request timed out",
+        body: UpstreamErrorSchema,
+      },
     },
     handler: async ({ query }) => {
       try {
@@ -35,9 +41,15 @@ export function registerBooksRoutes(app: App): void {
       } catch (err) {
         const status = (err as { status?: number }).status;
         if (status === 503)
-          return { status: 503 as const, body: { message: "Upstream service unavailable" } };
+          return {
+            status: 503 as const,
+            body: { message: "Upstream service unavailable" },
+          };
         if (status === 504)
-          return { status: 504 as const, body: { message: "Upstream request timed out" } };
+          return {
+            status: 504 as const,
+            body: { message: "Upstream request timed out" },
+          };
         throw err;
       }
     },
@@ -54,8 +66,14 @@ export function registerBooksRoutes(app: App): void {
     responses: {
       200: { description: "Book found", body: BookSchema },
       404: { description: "Not found" },
-      503: { description: "Upstream service unavailable", body: UpstreamErrorSchema },
-      504: { description: "Upstream request timed out", body: UpstreamErrorSchema },
+      503: {
+        description: "Upstream service unavailable",
+        body: UpstreamErrorSchema,
+      },
+      504: {
+        description: "Upstream request timed out",
+        body: UpstreamErrorSchema,
+      },
     },
     handler: async ({ params }) => {
       try {
@@ -66,9 +84,15 @@ export function registerBooksRoutes(app: App): void {
         if (status === 404)
           throw new NotFoundError(`Book with OLID ${params.olid} not found`);
         if (status === 503)
-          return { status: 503 as const, body: { message: "Upstream service unavailable" } };
+          return {
+            status: 503 as const,
+            body: { message: "Upstream service unavailable" },
+          };
         if (status === 504)
-          return { status: 504 as const, body: { message: "Upstream request timed out" } };
+          return {
+            status: 504 as const,
+            body: { message: "Upstream request timed out" },
+          };
         throw err;
       }
     },
