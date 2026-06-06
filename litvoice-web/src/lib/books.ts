@@ -1,10 +1,14 @@
 import type { operations } from "./schema";
 import { apiFetch } from "./api";
 
+export type BookDetail =
+  operations["getBookById"]["responses"][200]["content"]["application/json"];
+
 export type SearchResult =
   operations["searchBooks"]["responses"][200]["content"]["application/json"];
 
-export type Book = SearchResult["docs"][number];
+export type Book =
+  operations["getBookById"]["responses"][200]["content"]["application/json"];
 
 export function coverUrl(coverId: number): string {
   return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
@@ -18,6 +22,6 @@ export async function searchBooks(
   return apiFetch<SearchResult>(`/books/search?${params}`);
 }
 
-export async function getBook(olid: string): Promise<Book> {
+export async function getBook(olid: string): Promise<BookDetail> {
   return apiFetch<Book>(`/books/${olid}`);
 }
