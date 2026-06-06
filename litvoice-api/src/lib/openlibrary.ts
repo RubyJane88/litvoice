@@ -1,7 +1,7 @@
 const BASE_URL = "https://openlibrary.org";
 const OPENLIBRARY_TIMEOUT_MS = (() => {
-  const raw = Number(process.env.OPENLIBRARY_TIMEOUT_MS ?? 4_000);
-  return Number.isFinite(raw) ? raw : 4_000;
+  const raw = Number(process.env.OPENLIBRARY_TIMEOUT_MS ?? 8_000);
+  return Number.isFinite(raw) && raw > 0 ? raw : 8_000;
 })();
 
 export class OpenLibraryError extends Error {
@@ -14,7 +14,7 @@ export class OpenLibraryError extends Error {
   }
 }
 
-async function fetchOpenLibraryJson(path: string) {
+async function fetchOpenLibraryJson(path: string, attempt = 0) {
   const url = `${BASE_URL}${path}`;
 
   try {
@@ -26,9 +26,23 @@ async function fetchOpenLibraryJson(path: string) {
     return res.json();
   } catch (err) {
     if (err instanceof OpenLibraryError) throw err;
-    if (err instanceof Error && err.name === "TimeoutError") {
+
+    const isTimeout =
+      err instanceof Error &&
+      (err.name === "TimeoutError" || err.name === "AbortError");
+
+    const isRetryable =
+      isTimeout ||
+      (err instanceof TypeError && err.message.includes("fetch failed"));
+
+    if (isRetryable && attempt < 1) {
+      return fetchOpenLibraryJson(path, attempt + 1);
+    }
+
+    if (isTimeout) {
       throw new OpenLibraryError(504, url);
     }
+
     throw new OpenLibraryError(503, url);
   }
 }
