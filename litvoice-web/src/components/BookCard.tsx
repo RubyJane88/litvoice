@@ -11,8 +11,8 @@ export function BookCard({ book }: Props) {
   return (
     <Link
       to={`/books/${book.key.replace("/works/", "")}`}
-      className="no-underline">
-      <Card className="flex gap-4 p-4">
+      className=" block no-underline">
+      <Card className="flex flex-row gap-4 p-4">
         <div className="w-16 shrink-0">
           {book.cover_i ? (
             <img

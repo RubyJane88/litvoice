@@ -65,8 +65,8 @@
     --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(35% 0.08 155);            /* forest border #2D5A3D */
-    --input: oklch(62% 0.12 65);             /* darker forest */
-    --ring: oklch(62% 0.12 65);             /* amber focus ring */
+    --input: oklch(62% 0.12 65);             /* deep amber #D4901A */
+    --ring: oklch(62% 0.12 65);             /* deep amber #D4901A */
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -90,7 +90,7 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(25% 0.08 155);           /* deep forest #1A3A2A */
+     --primary: oklch(25% 0.08 155);           /* deep forest #1A3A2A */
     --primary-foreground: oklch(95% 0.03 80); /* parchment */
     --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);

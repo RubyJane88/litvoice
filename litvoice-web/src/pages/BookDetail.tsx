@@ -23,6 +23,13 @@ export function BookDetail() {
       .catch((err) => {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : "Something went wrong.");
+           const rawMessage = err instanceof Error ? err.message : "Something went wrong.";
+           try {
+             const parsed = JSON.parse(rawMessage) as { message?: unknown };
+             setError(typeof parsed.message === "string" ? parsed.message : rawMessage);
+           } catch {
+             setError(rawMessage);
+           }
           setLoading(false);
         }
       });
