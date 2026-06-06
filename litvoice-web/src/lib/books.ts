@@ -7,8 +7,7 @@ export type BookDetail =
 export type SearchResult =
   operations["searchBooks"]["responses"][200]["content"]["application/json"];
 
-export type Book =
-  operations["getBookById"]["responses"][200]["content"]["application/json"];
+export type Book = SearchResult["docs"][number];
 
 export function coverUrl(coverId: number): string {
   return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
