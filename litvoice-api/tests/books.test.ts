@@ -2,6 +2,8 @@ import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { buildApp } from "../src/build-app.js";
 import type { SearchResult } from "../src/modules/books/books.schema.js";
+import * as openLibrary from "../src/lib/openlibrary.js";
+import { fetchGuard } from "@daloyjs/core";
 
 const app = buildApp();
 
@@ -49,7 +51,7 @@ describe("Books routes", () => {
 
   describe("GET /books/search happy path", () => {
     before(() => {
-      globalThis.fetch = async () => {
+      openLibrary.fetchClient.fetch = async () => {
         return new Response(
           JSON.stringify({
             numFound: 1,
@@ -65,6 +67,10 @@ describe("Books routes", () => {
           { status: 200 },
         );
       };
+    });
+
+    after(() => {
+      openLibrary.fetchClient.fetch = fetchGuard();
     });
 
     it("returns 200 with results for a valid query", async () => {

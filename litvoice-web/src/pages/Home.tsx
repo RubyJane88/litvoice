@@ -35,7 +35,6 @@ export function Home() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">LitVoice</h1>
       <SearchBar onSearch={handleSearch} loading={loading} />
       {error && <p className="text-sm text-destructive">{error}</p>}
       {loading && (
