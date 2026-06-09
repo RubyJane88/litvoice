@@ -6,7 +6,7 @@ const OPENLIBRARY_TIMEOUT_MS = (() => {
   return Number.isFinite(raw) && raw > 0 ? raw : 8_000;
 })();
 
-const safeFetch = fetchGuard();
+export const fetchClient = { fetch: fetchGuard() };
 
 export class OpenLibraryError extends Error {
   constructor(
@@ -22,7 +22,7 @@ async function fetchOpenLibraryJson(path: string, attempt = 0) {
   const url = `${BASE_URL}${path}`;
 
   try {
-    const res = await safeFetch(url, {
+    const res = await fetchClient.fetch(url, {
       signal: AbortSignal.timeout(OPENLIBRARY_TIMEOUT_MS),
     });
 
