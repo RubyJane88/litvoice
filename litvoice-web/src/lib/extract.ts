@@ -90,6 +90,37 @@ async function extractPdf(file: File): Promise<string> {
   return pages.join("\n\n").trim();
 }
 
+async function extractEpub(file: File): Promise<string> {
+  const ePub = (await import("epubjs")).default;
+
+  const arrayBuffer = await file.arrayBuffer();
+  const book = ePub(arrayBuffer as any);
+  await book.ready;
+
+  const texts: string[] = [];
+
+  book.spine.each((section: any) => {
+    texts.push(section.href);
+  });
+
+  const sectionTexts: string[] = [];
+
+  for (const href of texts) {
+    try {
+      const section = book.spine.get(href) as any;
+      if (!section) continue;
+
+      const contents = (await book.load(section.url)) as Document;
+      const text = contents.body?.textContent?.trim() ?? "";
+      if (text) sectionTexts.push(text);
+    } catch {
+      continue;
+    }
+  }
+
+  return sectionTexts.filter(Boolean).join("\n\n").trim();
+}
+
 export async function extractText(file: File): Promise<string> {
   validateFileSize(file);
 
@@ -104,6 +135,7 @@ export async function extractText(file: File): Promise<string> {
     case "pdf":
       return extractPdf(file);
     case "epub":
+      return extractEpub(file);
     case "docx":
       throw new Error(`${format.toUpperCase()} support coming soon`);
   }

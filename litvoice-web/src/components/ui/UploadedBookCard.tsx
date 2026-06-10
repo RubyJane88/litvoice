@@ -15,7 +15,7 @@ export function UploadedBookCard({
   onDelete,
 }: UploadedBookCardProps) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden hover:bg-muted-20 hover:border-amber-500 transition-all duration-200 hover:shadow-lg group border border-border/50">
       <CardHeader>
         <CardTitle className="flex justify-between items-start gap-4">
           <span className="line-clamp-2 flex-1">{book.title}</span>
@@ -23,7 +23,7 @@ export function UploadedBookCard({
             variant="ghost"
             size="icon"
             onClick={() => onDelete(book.id)}
-            className="text-destructive hover:text-destructive/80 shrink-0">
+            className="text-destructive hover:text-destructive/80 shrink-0 opacity-40 group-hover:opacity-100">
             <Trash2 className="h-4 w-4" />
           </Button>
         </CardTitle>
