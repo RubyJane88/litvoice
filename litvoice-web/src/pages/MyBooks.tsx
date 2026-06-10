@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { UploadZone } from "@/components/ui/UploadZone";
 import { Upload, BookOpen } from "lucide-react";
-import {
-  extractText,
-  countWords,
-  getSupportedFormat,
-} from "@/lib/extract";
+import { extractText, countWords, getSupportedFormat } from "@/lib/extract";
 import { UploadedBookCard } from "@/components/ui/UploadedBookCard";
 import type { UploadedBook } from "@/lib/db";
 import {
@@ -76,6 +72,25 @@ export default function MyBooks() {
     }
   };
 
+  const handleTitleUpdate = async (id: string, newTitle: string) => {
+    try {
+      // Update in IndexedDB
+      const bookToUpdate = books.find((b) => b.id === id);
+      if (bookToUpdate) {
+        const updatedBook = { ...bookToUpdate, title: newTitle };
+        await saveUploadedBook(updatedBook); // save the updated version
+
+        // Update local state
+        setBooks((prev) =>
+          prev.map((book) => (book.id === id ? updatedBook : book)),
+        );
+      }
+    } catch (err) {
+      console.error("Failed to update title:", err);
+      alert("Failed to update title. Please try again.");
+    }
+  };
+
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-2">My Books</h1>
@@ -110,6 +125,7 @@ export default function MyBooks() {
                 book={book}
                 onListen={handleListen}
                 onDelete={handleDelete}
+                onTitleUpdate={handleTitleUpdate}
               />
             ))}
           </div>
