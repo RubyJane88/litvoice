@@ -121,6 +121,15 @@ async function extractEpub(file: File): Promise<string> {
   return sectionTexts.filter(Boolean).join("\n\n").trim();
 }
 
+async function extractDocx(file: File): Promise<string> {
+  const mammoth = await import("mammoth");
+
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+
+  return result.value.trim();
+}
+
 export async function extractText(file: File): Promise<string> {
   validateFileSize(file);
 
@@ -137,6 +146,6 @@ export async function extractText(file: File): Promise<string> {
     case "epub":
       return extractEpub(file);
     case "docx":
-      throw new Error(`${format.toUpperCase()} support coming soon`);
+      return extractDocx(file);
   }
 }
