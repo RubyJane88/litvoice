@@ -1,12 +1,19 @@
 import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, NavLink, useNavigate } from "react-router";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  useNavigate,
+} from "react-router";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Search, Bookmark } from "lucide-react";
+import { House, Bookmark, Upload } from "lucide-react";
 
 const Home = lazy(() => import("./pages/Home"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
 const ReadingList = lazy(() => import("./pages/ReadingList"));
 const OfflineFallback = lazy(() => import("./pages/OfflineFallback"));
+const MyBooks = lazy(() => import("./pages/MyBooks"));
 
 function AppContent() {
   const navigate = useNavigate();
@@ -39,7 +46,9 @@ function AppContent() {
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/80 backdrop-blur-md">
         <div className="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
-          <NavLink to="/" className="flex items-center gap-2 font-bold text-lg text-primary tracking-tight">
+          <NavLink
+            to="/"
+            className="flex items-center gap-2 font-bold text-lg text-primary tracking-tight">
             <span>LitVoice</span>
           </NavLink>
           <nav className="flex items-center gap-1">
@@ -52,10 +61,9 @@ function AppContent() {
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 }`
-              }
-            >
-              <Search className="w-4 h-4" />
-              <span>Search</span>
+              }>
+              <House className="w-4 h-4" />
+              <span>Home</span>
             </NavLink>
             <NavLink
               to="/reading-list"
@@ -65,10 +73,21 @@ function AppContent() {
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 }`
-              }
-            >
+              }>
               <Bookmark className="w-4 h-4" />
               <span>Saved</span>
+            </NavLink>
+            <NavLink
+              to="/my-books"
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                }`
+              }>
+              <Upload className="w-4 h-4" />
+              <span>My Books</span>
             </NavLink>
           </nav>
         </div>
@@ -90,7 +109,12 @@ function AppContent() {
           path="/reading-list"
           element={
             <ErrorBoundary>
-              <Suspense fallback={<div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground"><p>Loading...</p></div>}>
+              <Suspense
+                fallback={
+                  <div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground">
+                    <p>Loading...</p>
+                  </div>
+                }>
                 <ReadingList />
               </Suspense>
             </ErrorBoundary>
@@ -100,7 +124,12 @@ function AppContent() {
           path="/books/:olid"
           element={
             <ErrorBoundary>
-              <Suspense fallback={<div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground"><p>Loading...</p></div>}>
+              <Suspense
+                fallback={
+                  <div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground">
+                    <p>Loading...</p>
+                  </div>
+                }>
                 <BookDetail />
               </Suspense>
             </ErrorBoundary>
@@ -110,8 +139,29 @@ function AppContent() {
           path="/offline"
           element={
             <ErrorBoundary>
-              <Suspense fallback={<div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground"><p>Loading...</p></div>}>
+              <Suspense
+                fallback={
+                  <div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground">
+                    <p>Loading...</p>
+                  </div>
+                }>
                 <OfflineFallback />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+
+        <Route
+          path="/my-books"
+          element={
+            <ErrorBoundary>
+              <Suspense
+                fallback={
+                  <div className="max-w-2xl mx-auto px-4 py-8 text-sm text-muted-foreground">
+                    <p>Loading...</p>
+                  </div>
+                }>
+                <MyBooks />
               </Suspense>
             </ErrorBoundary>
           }

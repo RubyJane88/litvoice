@@ -1,9 +1,11 @@
 # LitVoice — Claude Context
 
 ## What this project is
+
 Personal free audiobook reader. DaloyJS API + React/Vite frontend. Portfolio/learning project targeting Azure AKS deployment.
 
 ## Read these first
+
 - `instructions for you claude.md` — how to work with the user (teacher/mentor mode, give code, user types it)
 - `ROADMAP.md` — current sprint, decisions, lessons learned (local only, not committed)
 - `AI_WORKFLOW.md` — tool roles (Claude.ai vs Claude Code vs Copilot) (local only, not committed)
@@ -11,6 +13,7 @@ Personal free audiobook reader. DaloyJS API + React/Vite frontend. Portfolio/lea
 - `litvoice-api/.agents/skills/daloyjs-best-practices/SKILL.md` — full DaloyJS workflow
 
 ## Project structure
+
 ```
 litvoice/
 ├── litvoice-api/   ← DaloyJS REST API (Node.js, pnpm, TypeScript)
@@ -18,12 +21,11 @@ litvoice/
 ```
 
 ## Current sprint
-Sprint 1 — Frontend (React + Vite).
-- Data layer complete: `src/lib/api.ts` (base HTTP) + `src/lib/books.ts` (domain)
-- Types generated from API spec via `pnpm gen:types`
-- Next: shadcn/ui setup → components → Home page
+
+File uploads (client-side). See `SPRINTBOARD.md` for details.
 
 ## Non-negotiable rules
+
 1. Never remove `requestId()`, `secureHeaders()`, `rateLimit()` from the API
 2. Never write to user files without being asked — give code, user types it in themselves
 3. `VITE_*` env vars are public — never store secrets in them
