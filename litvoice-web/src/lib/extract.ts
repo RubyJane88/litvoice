@@ -9,12 +9,18 @@ const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 export function getSupportedFormat(filename: string): SupportedFormat | null {
   const ext = filename.split(".").pop()?.toLowerCase();
   switch (ext) {
-    case "txt": return "txt";
-    case "md": return "md";
-    case "pdf": return "pdf";
-    case "epub": return "epub";
-    case "docx": return "docx";
-    default: return null;
+    case "txt":
+      return "txt";
+    case "md":
+      return "md";
+    case "pdf":
+      return "pdf";
+    case "epub":
+      return "epub";
+    case "docx":
+      return "docx";
+    default:
+      return null;
   }
 }
 
@@ -38,13 +44,10 @@ function validateFileSize(file: File): void {
   if (file.size > MAX_FILE_SIZE_BYTES) {
     throw new Error(
       `File "${file.name}" is too large (${(file.size / (1024 * 1024)).toFixed(1)} MB). ` +
-      `Maximum allowed size is 10 MB.`
+        `Maximum allowed size is 10 MB.`,
     );
   }
 }
-
-
-
 
 async function extractTxt(file: File): Promise<string> {
   return file.text();
@@ -53,24 +56,53 @@ async function extractTxt(file: File): Promise<string> {
 async function extractMd(file: File): Promise<string> {
   const raw = await file.text();
   return raw
-    .replace(/#{1,6}\s+/g, "")         // headings
-    .replace(/\*\*(.+?)\*\*/g, "$1")   // bold
-    .replace(/\*(.+?)\*/g, "$1")       // italic
+    .replace(/#{1,6}\s+/g, "") // headings
+    .replace(/\*\*(.+?)\*\*/g, "$1") // bold
+    .replace(/\*(.+?)\*/g, "$1") // italic
     .replace(/\[(.+?)\]\(.+?\)/g, "$1") // links
     .replace(/`{1,3}[^`]*`{1,3}/g, "") // code
-    .replace(/^\s*[-*+]\s+/gm, "")     // list items
-    .replace(/^\s*>\s+/gm, "")         // blockquotes
+    .replace(/^\s*[-*+]\s+/gm, "") // list items
+    .replace(/^\s*>\s+/gm, "") // blockquotes
     .trim();
 }
 
+async function extractPdf(file: File): Promise<string> {
+  const { getDocument, GlobalWorkerOptions } = await import("pdfjs-dist");
+
+  GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.mjs",
+    import.meta.url,
+  ).toString();
+
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await getDocument({ data: arrayBuffer }).promise;
+
+  const pages: string[] = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      .map((item) => ("str" in item ? item.str : ""))
+      .join(" ");
+    pages.push(pageText);
+  }
+
+  return pages.join("\n\n").trim();
+}
+
 export async function extractText(file: File): Promise<string> {
+  validateFileSize(file);
+
   const format = getSupportedFormat(file.name);
   if (!format) throw new Error(`Unsupported file format: ${file.name}`);
 
   switch (format) {
-    case "txt": return extractTxt(file);
-    case "md": return extractMd(file);
+    case "txt":
+      return extractTxt(file);
+    case "md":
+      return extractMd(file);
     case "pdf":
+      return extractPdf(file);
     case "epub":
     case "docx":
       throw new Error(`${format.toUpperCase()} support coming soon`);

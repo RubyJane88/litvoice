@@ -15,7 +15,7 @@ export function UploadZone({
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const supportedFormats = [".txt", ".md"];
+  const supportedFormats = [".txt", ".md", ".pdf", ".epub", ".docx"];
 
   const handleFiles = useCallback(
     (files: FileList | null) => {
@@ -72,7 +72,7 @@ export function UploadZone({
 
         <h3 className="text-2xl font-semibold mb-3">Upload your books</h3>
         <p className="text-muted-foreground mb-8 max-w-md">
-          Drag & drop your .txt or .md files here, or click to browse
+          Drag & drop your books here, or click to browse your files.
         </p>
 
         <Button
@@ -87,7 +87,7 @@ export function UploadZone({
           id="file-input"
           type="file"
           multiple
-          accept=".txt,.md"
+          accept=".txt,.md, .docx, .pdf, .epub"
           className="hidden"
           onChange={handleFileInput}
         />
