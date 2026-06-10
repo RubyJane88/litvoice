@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useState } from "react";
 import { Upload, FileText, AlertCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
