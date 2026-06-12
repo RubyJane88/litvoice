@@ -34,7 +34,23 @@ export function Home() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+    <main className="max-w-2xl mx-auto px-4 py-8">
+      {/* Hero */}
+      <section className="text-center mb-12">
+        <h1 className="text-4xl font-heading font-bold tracking-tight mb-4">
+          Read Books with Your Ears
+        </h1>
+        <p className="text-muted-foreground text-base leading-relaxed max-w-lg mx-auto">
+          You have books you've been wanting to read, but no time to sit down and read? 
+          Listen to thousands of classic books for free — at the gym, on your walk, doing the dishes, 
+          even on a plane. 
+          Upload your own PDF, EPUB, or DOCX and listen to those too.
+        </p>
+        <p className="text-sm text-accent font-medium mt-4">
+          Works offline. Never leave your device. 
+        </p>
+      </section>
+
       <SearchBar onSearch={handleSearch} loading={loading} />
       {error && <p className="text-sm text-destructive">{error}</p>}
       {loading && (

@@ -8,6 +8,8 @@ import {
 } from "react-router";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { House, Bookmark, Upload } from "lucide-react";
+import { PlayerProvider, usePlayer } from "@/context/playerContext";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 const Home = lazy(() => import("./pages/Home"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
@@ -17,6 +19,7 @@ const MyBooks = lazy(() => import("./pages/MyBooks"));
 
 function AppContent() {
   const navigate = useNavigate();
+  const { activeBook, stopPlaying } = usePlayer();
 
   useEffect(() => {
     const handleOffline = () => {
@@ -24,7 +27,6 @@ function AppContent() {
     };
 
     const handleOnline = () => {
-      // Go back to home or previous page
       navigate("/");
     };
 
@@ -167,6 +169,16 @@ function AppContent() {
           }
         />
       </Routes>
+      {/* Global Audio Player */}
+      {activeBook && (
+        <AudioPlayer
+          text={activeBook.text}
+          title={activeBook.title}
+          startPosition={activeBook.startPosition}
+          onPositionChange={activeBook.onPositionChange}
+          onClose={() => stopPlaying()}
+        />
+      )}
     </div>
   );
 }
@@ -174,7 +186,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <PlayerProvider>
+        <AppContent />
+      </PlayerProvider>
     </BrowserRouter>
   );
 }

@@ -103,3 +103,25 @@ export async function updateUploadedBookTitle(id: string, title: string): Promis
     await db.put("uploadedBooks", { ...book, title });
   }
 }
+
+export async function updateUploadedBookPosition(
+  id: string,
+  position: number,
+): Promise<void> {
+  const db = await getDB();
+  const book = await db.get("uploadedBooks", id);
+  if (book) {
+    await db.put("uploadedBooks", { ...book, currentPosition: position });
+  }
+}
+
+export async function updateSavedBookPosition(
+  key: string,
+  position: number,
+): Promise<void> {
+  const db = await getDB();
+  const book = await db.get("savedBooks", key);
+  if (book) {
+    await db.put("savedBooks", { ...book, currentPosition: position });
+  }
+}
