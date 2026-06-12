@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { UploadZone } from "@/components/ui/UploadZone";
-import { Upload, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { extractText, countWords, getSupportedFormat } from "@/lib/extract";
 import { UploadedBookCard } from "@/components/ui/UploadedBookCard";
-import type { UploadedBook } from "@/lib/db";
 import {
   saveUploadedBook,
   getUploadedBooks,
   removeUploadedBook,
+  UploadedBook,
+  updateUploadedBookPosition,
 } from "@/lib/db";
 
 export default function MyBooks() {
   const [books, setBooks] = useState<UploadedBook[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load books from IndexedDB
   useEffect(() => {
     const loadBooks = async () => {
       try {
@@ -56,11 +56,13 @@ export default function MyBooks() {
   };
 
   const handleListen = (book: UploadedBook) => {
-    console.log("🎧 Start listening to:", book.title);
-    // TODO: Implement audio player in next step
-    alert(`🎧 Would play audio for "${book.title}" (${book.wordCount} words)`);
+    startPlaying({
+      text: book.extractedText,
+      title: book.title,
+      startPosition: book.currentPosition ?? 0,
+      onPositionChange: (pos: any) => updateUploadedBookPosition(book.id, pos),
+    });
   };
-
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this book?")) return;
 
@@ -123,7 +125,6 @@ export default function MyBooks() {
               <UploadedBookCard
                 key={book.id}
                 book={book}
-                onListen={handleListen}
                 onDelete={handleDelete}
                 onTitleUpdate={handleTitleUpdate}
               />

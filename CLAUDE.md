@@ -15,14 +15,18 @@ Personal free audiobook reader. DaloyJS API + React/Vite frontend. Portfolio/lea
 ## Project structure
 
 ```
-litvoice/
-├── litvoice-api/   ← DaloyJS REST API (Node.js, pnpm, TypeScript)
 └── litvoice-web/   ← React 19 + Vite 6 + TypeScript + Tailwind v4
+    └── src/
+        ├── components/   ← UI components
+        ├── context/      ← React context (playerContext)
+        ├── hooks/        ← custom hooks (useSpeech, useVoices, usePosition)
+        ├── lib/          ← pure logic (api, books, db, extract)
+        └── pages/        ← route pages
 ```
 
-## Current sprint
 
-File uploads (client-side). See `SPRINTBOARD.md` for details.
+## Current sprint
+Audio / TTS (Sprint 4). See `SPRINTBOARD.md` for details.
 
 ## Non-negotiable rules
 
@@ -34,5 +38,9 @@ File uploads (client-side). See `SPRINTBOARD.md` for details.
 6. Types come from `schema.d.ts` (generated) — never hand-write types that mirror the backend
 7. Run `pnpm typecheck` before declaring any task done
 8. When API routes change: `pnpm gen` (API) → `pnpm gen:types` (web)
-9. Sessions use `httpOnly` cookies — never `localStorage` for auth tokens
+9. Sessions use `httpOnly` cookies — never `localStorage` for auth tokens (Sprint 6+)
 10. Build order: data layer → component library → components. Never UI-first.
+11. Always use `type` for props and data shapes — never `interface` unless extending a third-party type
+12. User files never leave the device — extract client-side only, never upload to server
+13. Free tier audio = Web Speech API only — never call Azure TTS for free users
+

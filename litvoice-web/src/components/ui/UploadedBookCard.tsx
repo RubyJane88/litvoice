@@ -2,21 +2,22 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Trash2, Check, X } from "lucide-react";
+import { usePlayer } from "@/context/playerContext";
 import type { UploadedBook } from "@/lib/db";
+import { updateUploadedBookPosition } from "@/lib/db";
 
 type UploadedBookCardProps = {
   book: UploadedBook;
-  onListen: (book: UploadedBook) => void;
   onDelete: (id: string) => void;
   onTitleUpdate?: (id: string, newTitle: string) => void;
 };
 
 export function UploadedBookCard({
   book,
-  onListen,
   onDelete,
   onTitleUpdate,
 }: UploadedBookCardProps) {
+  const { startPlaying } = usePlayer();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(book.title);
 
@@ -87,9 +88,20 @@ export function UploadedBookCard({
           {book.extractedText.substring(0, 280)}...
         </p>
 
-        <Button onClick={() => onListen(book)} className="w-full" size="lg">
+        <Button
+          onClick={() =>
+            startPlaying({
+              text: book.extractedText,
+              title: book.title,
+              startPosition: book.currentPosition ?? 0,
+              onPositionChange: (pos) =>
+              updateUploadedBookPosition(book.id, pos),
+            })
+          }
+          className="w-full"
+          size="lg">
           <Play className="mr-2 h-5 w-5" />
-          Listen Now
+          {book.currentPosition ? "Resume" : "Listen Now"}
         </Button>
       </CardContent>
     </Card>
