@@ -8,7 +8,6 @@ import {
   getUploadedBooks,
   removeUploadedBook,
   UploadedBook,
-  updateUploadedBookPosition,
 } from "@/lib/db";
 
 export default function MyBooks() {
@@ -55,14 +54,6 @@ export default function MyBooks() {
     }
   };
 
-  const handleListen = (book: UploadedBook) => {
-    startPlaying({
-      text: book.extractedText,
-      title: book.title,
-      startPosition: book.currentPosition ?? 0,
-      onPositionChange: (pos: any) => updateUploadedBookPosition(book.id, pos),
-    });
-  };
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this book?")) return;
 
@@ -76,13 +67,11 @@ export default function MyBooks() {
 
   const handleTitleUpdate = async (id: string, newTitle: string) => {
     try {
-      // Update in IndexedDB
       const bookToUpdate = books.find((b) => b.id === id);
       if (bookToUpdate) {
         const updatedBook = { ...bookToUpdate, title: newTitle };
-        await saveUploadedBook(updatedBook); // save the updated version
+        await saveUploadedBook(updatedBook);
 
-        // Update local state
         setBooks((prev) =>
           prev.map((book) => (book.id === id ? updatedBook : book)),
         );

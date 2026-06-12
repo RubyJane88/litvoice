@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Play, Pause, Square, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { useSpeech } from "../hooks/useSpeech";
@@ -33,6 +33,10 @@ export function AudioPlayer({
     pause,
     stop,
   } = useSpeech({ text, startPosition, onPositionChange });
+
+  useEffect(() => {
+    play();
+  }, []);
 
   const progressPercent =
     text.length > 0 ? Math.round((position / text.length) * 100) : 0;
