@@ -36,3 +36,9 @@ litvoice-web/src/docs/litvoice_system_structure_2.svg
 litvoice-web/src/docs/litvoice_component_tree.svg
 litvoice-web/src/docs/litvoice_architecture.svg
 litvoice-web/src/docs/litvoice_request_flow.svg
+
+
+# infra terraform 
+infra/.terraform/
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
