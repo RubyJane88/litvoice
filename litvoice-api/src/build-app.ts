@@ -8,6 +8,7 @@ export function buildApp(): App {
     bodyLimitBytes: 1024 * 1024,
     requestTimeoutMs: Number(process.env.REQUEST_TIMEOUT_MS ?? 10_000),
     production: process.env.NODE_ENV === "production",
+    trustProxy: true,
     openapi: {
       servers: [{ url: `http://localhost:${process.env.PORT ?? 3000}` }],
     },
