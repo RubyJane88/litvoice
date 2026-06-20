@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { App, rateLimit, requestId, secureHeaders } from "@daloyjs/core";
+import { App, cors, rateLimit, requestId, secureHeaders } from "@daloyjs/core";
 
 import { registerBooksRoutes } from "./modules/books/books.routes.js";
 
@@ -16,6 +16,11 @@ export function buildApp(): App {
   });
 
   app.use(requestId());
+  app.use(
+    cors({
+      origin: (process.env.CORS_ORIGIN ?? "http://localhost:5173").split(","),
+    }),
+  );
   app.use(secureHeaders());
   app.use(rateLimit({ windowMs: 60_000, max: 120 }));
 
