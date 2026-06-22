@@ -43,7 +43,11 @@ export default defineConfig({
         navigateFallback: "/index.html",
         runtimeCaching: [
           {
-            urlPattern: /^\/api\/books\/.*/,
+            urlPattern: process.env.VITE_API_BASE_URL
+              ? new RegExp(
+                  `^${process.env.VITE_API_BASE_URL.replace(/\./g, "\\.")}/books/`,
+                )
+              : /^\/api\/books\//,
             handler: "NetworkFirst",
             options: {
               cacheName: "api-books-cache",
