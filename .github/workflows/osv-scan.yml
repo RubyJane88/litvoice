@@ -3,7 +3,7 @@
 #
 # Why this exists for a REST API service:
 #   `vuln-scan.yml` already runs `      - name: Audit production dependencies (blocking)
-        run: pnpm audit --prod`-equivalent
+#        run: pnpm audit --prod`-equivalent
 #   `pnpm/npm/yarn/bun audit` against the committed lockfile every day,
 #   but that single feed (GHSA) is exactly the failure mode the Aikido
 #   write-up "SAST vs SCA" calls out: SCA findings are only as good as

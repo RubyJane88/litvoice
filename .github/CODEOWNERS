@@ -1,0 +1,32 @@
+# Replace the placeholder owner with the GitHub user or team that must review
+
+# privileged files before relying on CODEOWNERS protection.
+
+- * @RubyJane88
+
+# Workflow / CI / CD.
+
+/.github/ @RubyJane88
+/.github/workflows/ @RubyJane88
+/.github/workflows/vuln-scan.yml @RubyJane88
+/.github/workflows/osv-scan.yml @RubyJane88
+/.github/workflows/dast.yml @RubyJane88
+/.github/workflows/secret-scan.yml @RubyJane88
+/.github/dependabot.yml @RubyJane88
+/.github/CODEOWNERS @RubyJane88
+
+# Files that affect dependency resolution, install scripts, or publishing.
+
+/package.json @RubyJane88
+/package-lock.json @RubyJane88
+/npm-shrinkwrap.json @RubyJane88
+/pnpm-lock.yaml @RubyJane88
+/pnpm-workspace.yaml @RubyJane88
+/yarn.lock @RubyJane88
+/bun.lock @RubyJane88
+/.npmrc @RubyJane88
+/scripts/verify-lockfile-sources.mjs @RubyJane88
+
+# Vulnerability handling.
+
+/SECURITY.md @RubyJane88

@@ -159,7 +159,7 @@ container and CI defaults above:
 
 Before relying on these files for a company project:
 
-1. Replace `@your-org/security-team` in `.github/CODEOWNERS` or pass `--code-owner` when scaffolding.
+1. Replace `@RubyJane88` in `.github/CODEOWNERS` or pass `--code-owner` when scaffolding.
 2. Protect the `main` branch and require the CI, CodeQL, Opengrep, Scorecard, and zizmor checks.
 3. Enable GitHub secret scanning and push protection.
 4. Keep `ignore-scripts=true` and the `pnpm-workspace.yaml` supply-chain settings on when using pnpm.
