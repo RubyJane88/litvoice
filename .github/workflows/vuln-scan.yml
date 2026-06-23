@@ -81,16 +81,33 @@ jobs:
         with:
           node-version: 24
 
-
-
-      - name: Install dependencies (no scripts)
+      - name: Install API dependencies (no scripts)
         run: pnpm install --frozen-lockfile --ignore-scripts
+        working-directory: litvoice-api
         env:
           npm_config_ignore_scripts: "true"
 
-      - name: Audit production dependencies (blocking)
+      - name: Audit API production dependencies (blocking)
         run: pnpm audit --prod
+        working-directory: litvoice-api
 
-      - name: Audit full dependency tree (advisory)
+      - name: Audit API full dependency tree (advisory)
         run: pnpm audit
+        working-directory: litvoice-api
         continue-on-error: true
+
+      - name: Install web dependencies (no scripts)
+        run: pnpm install --frozen-lockfile --ignore-scripts
+        working-directory: litvoice-web
+        env:
+          npm_config_ignore_scripts: "true"
+
+      - name: Audit web production dependencies (blocking)
+        run: pnpm audit --prod
+        working-directory: litvoice-web
+
+      - name: Audit web full dependency tree (advisory)
+        run: pnpm audit
+        working-directory: litvoice-web
+        continue-on-error: true
+
