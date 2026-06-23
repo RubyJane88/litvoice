@@ -3,3 +3,5 @@ allowBuilds:
   es5-ext: false
   esbuild: true
   msw: true
+overrides:
+  "@xmldom/xmldom": "^0.8.13"
