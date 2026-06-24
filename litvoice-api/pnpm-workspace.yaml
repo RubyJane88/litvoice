@@ -25,3 +25,6 @@ blockExoticSubdeps: true
 
 allowBuilds:
   esbuild: true
+  
+overrides:
+  js-yaml: ">=4.2.0"
