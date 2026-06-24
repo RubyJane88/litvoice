@@ -5,3 +5,7 @@ allowBuilds:
   msw: true
 overrides:
   "@xmldom/xmldom": "^0.8.13"
+  js-yaml: ">=4.2.0"
+peerDependencyRules:
+  allowedVersions:
+    openapi-typescript>typescript: ">=5"
