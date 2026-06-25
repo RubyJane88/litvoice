@@ -90,24 +90,28 @@ jobs:
           node-version: 24
 
       - name: Install dependencies (no scripts)
+        working-directory: litvoice-api
         run: pnpm install --frozen-lockfile --ignore-scripts
         env:
           npm_config_ignore_scripts: "true"
 
       - name: Build
+        working-directory: litvoice-api
         run: pnpm build
 
       - name: Start application (background)
+        working-directory: litvoice-api
         run: |
           mkdir -p dast-results
           chmod 777 dast-results
-          nohup node dist/index.js > dast-results/server.log 2>&1 &
+          nohup node dist/src/index.js > dast-results/server.log 2>&1 &
           echo $! > dast-results/server.pid
         env:
           PORT: "3000"
           NODE_ENV: production
 
       - name: Wait for target to be reachable
+        working-directory: litvoice-api
         run: |
           for i in $(seq 1 30); do
             if curl -fsS --max-time 2 http://localhost:3000/healthz > /dev/null \
@@ -122,6 +126,7 @@ jobs:
           exit 1
 
       - name: Run OWASP ZAP baseline scan
+        working-directory: litvoice-api
         run: |
           docker pull ghcr.io/zaproxy/zaproxy:stable
           docker run --rm --network host \
@@ -137,6 +142,7 @@ jobs:
 
       - name: Stop application
         if: always()
+        working-directory: litvoice-api 
         run: |
           if [ -f dast-results/server.pid ]; then
             kill "$(cat dast-results/server.pid)" || true
@@ -144,6 +150,7 @@ jobs:
 
       - name: Summarize ZAP findings and fail on HIGH
         if: always()
+        working-directory: litvoice-api 
         run: |
           report=dast-results/zap-report.json
           if [ ! -f "$report" ]; then
