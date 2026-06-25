@@ -12,18 +12,16 @@ const originalFetch = globalThis.fetch;
 
 before(() => {
   globalThis.fetch = async (url: string | URL | Request) => {
-    const urlStr = url.toString();
-    if (urlStr.includes("/works/INVALID000")) {
-      return new Response(JSON.stringify({ error: "notfound" }), {
-        status: 404,
-      });
-    }
+    return new Response(JSON.stringify({ error: "notfound" }), { status: 404 });
+  };
+  openLibrary.fetchClient.fetch = async () => {
     return new Response(JSON.stringify({ error: "notfound" }), { status: 404 });
   };
 });
 
 after(() => {
   globalThis.fetch = originalFetch;
+  openLibrary.fetchClient.fetch = fetchGuard();
 });
 
 describe("GET /books/search", () => {
