@@ -6,6 +6,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    cooldown:
+      default-days: 1
     open-pull-requests-limit: 10
     groups:
       actions:
@@ -19,6 +21,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    cooldown:
+      default-days: 1
     open-pull-requests-limit: 10
     versioning-strategy: increase-if-necessary
     groups:
@@ -32,6 +36,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    cooldown:
+      default-days: 1
     open-pull-requests-limit: 10
     versioning-strategy: increase-if-necessary
     groups:
@@ -48,6 +54,8 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    cooldown:
+      default-days: 1
     open-pull-requests-limit: 5
     commit-message:
       prefix: "chore(docker)"
