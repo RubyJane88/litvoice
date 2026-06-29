@@ -13,7 +13,6 @@ export function ReadingList() {
   useEffect(() => {
     getSavedBooks()
       .then((saved) => {
-        // Sort by savedAt descending
         const sorted = [...saved].sort((a, b) => b.savedAt - a.savedAt);
         setBooks(sorted);
       })
@@ -21,37 +20,40 @@ export function ReadingList() {
   }, []);
 
   const handleToggleSave = (key: string, saved: boolean) => {
-    if (!saved) {
-      setBooks((prev) => prev.filter((b) => b.key !== key));
-    }
+    if (!saved) setBooks((prev) => prev.filter((b) => b.key !== key));
   };
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
-      <div className="flex items-center gap-2">
-        <Bookmark className="w-6 h-6 text-primary" fill="currentColor" />
-        <h1 className="text-2xl font-bold">My Reading List</h1>
+    <main className="max-w-2xl mx-auto px-4 py-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-heading font-bold mb-1">Reading List</h1>
+        <p className="text-sm text-muted-foreground">
+          Books you've saved to listen to later.
+        </p>
       </div>
 
       {loading && (
-        <p className="text-sm text-muted-foreground">Loading your list...</p>
+        <p className="text-sm text-muted-foreground">Loading your list…</p>
       )}
 
       {!loading && books.length === 0 && (
-        <div className="text-center py-12 border border-dashed rounded-lg border-border bg-card/20 flex flex-col items-center gap-4">
-          <p className="text-muted-foreground text-sm">Your reading list is empty.</p>
-          <Link
-            to="/"
-            className="text-sm text-primary hover:underline font-semibold"
-          >
-            Find books to save
+        <div className="text-center py-12">
+          <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center mx-auto mb-4 text-primary">
+            <Bookmark className="w-6 h-6" />
+          </div>
+          <p className="font-semibold text-sm mb-1">No saved books yet</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            Search for a book and save it to your reading list.
+          </p>
+          <Link to="/" className="text-sm text-primary hover:underline font-medium">
+            Browse books
           </Link>
         </div>
       )}
 
       {!loading && books.length > 0 && (
         <ErrorBoundary>
-          <ul className="flex flex-col gap-3 animate-fade-in">
+          <ul className="flex flex-col gap-3">
             {books.map((book) => (
               <li key={book.key}>
                 <BookCard

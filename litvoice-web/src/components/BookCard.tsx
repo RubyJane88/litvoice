@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Book as BookIcon } from "lucide-react";
 import { coverUrl } from "@/lib/books";
 import type { Book } from "@/lib/books";
 import { Link } from "react-router";
@@ -24,10 +23,8 @@ export function BookCard({ book, onToggleSave }: Props) {
     async (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-
       const nextSaved = !saved;
       setSaved(nextSaved);
-
       try {
         if (!nextSaved) {
           await removeBook(book.key);
@@ -42,12 +39,10 @@ export function BookCard({ book, onToggleSave }: Props) {
           };
           await saveBook(bookToSave);
         }
-        if (onToggleSave) {
-          onToggleSave(book.key, nextSaved);
-        }
+        onToggleSave?.(book.key, nextSaved);
       } catch (err) {
         console.error("Failed to update reading list:", err);
-        setSaved(saved); // Rollback
+        setSaved(saved);
       }
     },
     [book, saved],
@@ -56,57 +51,56 @@ export function BookCard({ book, onToggleSave }: Props) {
   return (
     <Link
       to={`/books/${book.key.replace("/works/", "")}`}
-      className="block no-underline">
-      <Card className="h-full flex flex-col overflow-hidden hover:bg-muted/50 transition-colors group">
-        <div className="flex flex-row gap-4 p-4 flex-1">
-          <div className="w-20 shrink-0">
-            {book.cover_i ? (
-              <img
-                src={coverUrl(book.cover_i)}
-                alt={book.title}
-                loading="lazy"
-                className="w-full rounded shadow-sm"
-              />
-            ) : (
-              <div className="w-full aspect-[3/4] bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
-                No cover
-              </div>
+      className="block">
+      <div className="flex items-stretch bg-card border border-border/60 rounded-xl overflow-hidden transition-all hover:border-border hover:shadow-sm">
+        <div className="w-[68px] shrink-0">
+          {book.cover_i ? (
+            <img
+              src={coverUrl(book.cover_i)}
+              alt={book.title}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full min-h-[92px] bg-gradient-to-br from-primary/70 to-primary/25 flex items-center justify-center text-primary-foreground/70">
+              <BookIcon className="w-5 h-5" />
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 p-3.5 flex flex-col">
+          <div className="flex-1 space-y-0.5">
+            <p className="font-semibold text-[0.9375rem] leading-snug">
+              {book.title}
+            </p>
+            {book.author_name?.[0] && (
+              <p className="text-sm text-muted-foreground">
+                {book.author_name[0]}
+              </p>
+            )}
+            {book.first_publish_year && (
+              <p className="text-xs text-muted-foreground">
+                {book.first_publish_year}
+              </p>
             )}
           </div>
-          <CardContent className="p-0 flex-1 flex flex-col">
-            <div className="flex-1 space-y-1">
-              <p className="font-semibold leading-tight">{book.title}</p>
-              {book.author_name?.[0] && (
-                <p className="text-sm text-muted-foreground">
-                  {book.author_name[0]}
-                </p>
-              )}
-              {book.first_publish_year && (
-                <p className="text-xs text-muted-foreground">
-                  {book.first_publish_year}
-                </p>
-              )}
-            </div>
-            <div className="pt-2 flex justify-end">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={handleSaveClick}
-                aria-label={
-                  saved ? "Remove from reading list" : "Save for later"
-                }
-                className="text-xs gap-1">
-                <Bookmark
-                  className="w-4 h-4"
-                  fill={saved ? "currentColor" : "none"}
-                />
-                {saved ? "Saved" : "Save"}
-              </Button>
-            </div>
-          </CardContent>
+          <div className="pt-2 flex justify-end">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleSaveClick}
+              aria-label={saved ? "Remove from reading list" : "Save for later"}
+              className="h-7 text-xs gap-1">
+              <Bookmark
+                className="w-3.5 h-3.5"
+                fill={saved ? "currentColor" : "none"}
+              />
+              {saved ? "Saved" : "Save"}
+            </Button>
+          </div>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }

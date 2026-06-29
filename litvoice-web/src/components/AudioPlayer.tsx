@@ -47,27 +47,24 @@ export function AudioPlayer({
   };
 
   const togglePlayPause = () => {
-    if (status === "playing") {
-      pause();
-    } else {
-      play();
-    }
+    if (status === "playing") pause();
+    else play();
   };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/80 bg-card/95 backdrop-blur-md">
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
+          type="button"
           onClick={togglePlayPause}
-          aria-label={status === "playing" ? "Pause" : "Play"}>
+          aria-label={status === "playing" ? "Pause" : "Play"}
+          className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 shadow-sm hover:opacity-90 transition-opacity">
           {status === "playing" ? (
-            <Pause className="w-5 h-5" />
+            <Pause className="w-4 h-4" />
           ) : (
-            <Play className="w-5 h-5" />
+            <Play className="w-4 h-4" />
           )}
-        </Button>
+        </button>
 
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{title}</p>
