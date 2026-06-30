@@ -9,6 +9,7 @@ export const BookSchema = z.object({
   edition_count: z.number().optional(),
   language: z.array(z.string()).optional(),
   ebook_access: z.string().optional(),
+  description: z.string().optional(),
 });
 
 export const SearchResultSchema = z.object({

@@ -212,6 +212,7 @@ export interface operations {
                             edition_count?: number;
                             language?: string[];
                             ebook_access?: string;
+                            description?: string;
                         }[];
                     };
                 };
@@ -273,6 +274,7 @@ export interface operations {
                         edition_count?: number;
                         language?: string[];
                         ebook_access?: string;
+                        description?: string;
                     };
                 };
             };
