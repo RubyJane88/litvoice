@@ -81,6 +81,12 @@ export async function isBookSaved(key: string): Promise<boolean> {
   return book !== undefined;
 }
 
+export async function getSavedBook(key: string): Promise<SavedBook | undefined> {
+  const db = await getDB();
+  return db.get("savedBooks", key);
+}
+
+
 export async function saveUploadedBook(book: UploadedBook): Promise<void> {
   const db = await getDB();
   await db.put("uploadedBooks", book);
