@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Bookmark, Book as BookIcon } from "lucide-react";
+import { Bookmark, Book as BookIcon, Play } from "lucide-react";
 import { coverUrl } from "@/lib/books";
 import type { Book } from "@/lib/books";
 import { Link } from "react-router";
@@ -10,9 +10,10 @@ import type { SavedBook } from "@/lib/db";
 type Props = {
   book: Book;
   onToggleSave?: (key: string, saved: boolean) => void;
+  onPlay?: (key: string) => void;
 };
 
-export function BookCard({ book, onToggleSave }: Props) {
+export function BookCard({ book, onToggleSave, onPlay }: Props) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -45,13 +46,11 @@ export function BookCard({ book, onToggleSave }: Props) {
         setSaved(saved);
       }
     },
-    [book, saved],
+    [book, saved, onToggleSave],
   );
 
   return (
-    <Link
-      to={`/books/${book.key.replace("/works/", "")}`}
-      className="block">
+    <Link to={`/books/${book.key.replace("/works/", "")}`} className="block">
       <div className="flex items-stretch bg-card border border-border/60 rounded-xl overflow-hidden transition-all hover:border-border hover:shadow-sm">
         <div className="w-[68px] shrink-0">
           {book.cover_i ? (
@@ -84,7 +83,23 @@ export function BookCard({ book, onToggleSave }: Props) {
               </p>
             )}
           </div>
-          <div className="pt-2 flex justify-end">
+          <div className="pt-2 flex justify-end gap-1">
+            {onPlay && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onPlay(book.key);
+                }}
+                aria-label="Play"
+                className="h-7 text-xs gap-1">
+                <Play className="w-3.5 h-3.5" />
+                Play
+              </Button>
+            )}
             <Button
               type="button"
               variant="ghost"

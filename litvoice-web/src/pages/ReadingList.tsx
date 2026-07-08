@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { getSavedBooks } from "@/lib/db";
 import type { SavedBook } from "@/lib/db";
 import { BookCard } from "@/components/BookCard";
@@ -9,6 +10,7 @@ import { Link } from "react-router";
 export function ReadingList() {
   const [books, setBooks] = useState<SavedBook[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getSavedBooks()
@@ -21,6 +23,10 @@ export function ReadingList() {
 
   const handleToggleSave = (key: string, saved: boolean) => {
     if (!saved) setBooks((prev) => prev.filter((b) => b.key !== key));
+  };
+
+  const handlePlay = (key: string) => {
+    void navigate(`/books/${key.replace("/works/", "")}?autoplay=true`);
   };
 
   return (
@@ -45,7 +51,9 @@ export function ReadingList() {
           <p className="text-sm text-muted-foreground mb-4">
             Search for a book and save it to your reading list.
           </p>
-          <Link to="/" className="text-sm text-primary hover:underline font-medium">
+          <Link
+            to="/"
+            className="text-sm text-primary hover:underline font-medium">
             Browse books
           </Link>
         </div>
@@ -59,6 +67,7 @@ export function ReadingList() {
                 <BookCard
                   book={{ ...book, cover_i: book.cover_i ?? undefined }}
                   onToggleSave={handleToggleSave}
+                  onPlay={handlePlay}
                 />
               </li>
             ))}

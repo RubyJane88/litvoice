@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, useSearchParams, Link } from "react-router";
 import { getBook, coverUrl } from "@/lib/books";
 import type { BookDetail as BookDetailType } from "@/lib/books";
 import { BookCardSkeleton } from "@/components/BookCardSkeleton";
@@ -22,6 +22,7 @@ export function BookDetail() {
   const [saved, setSaved] = useState(false);
   const [playerActive, setPlayerActive] = useState(false);
   const [startPosition, setStartPosition] = useState(0);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (!book?.key) return;
@@ -30,6 +31,13 @@ export function BookDetail() {
       setStartPosition(savedBook?.currentPosition ?? 0);
     });
   }, [book?.key]);
+
+  useEffect(() => {
+  if (book?.description && searchParams.get("autoplay") === "true") {
+    setPlayerActive(true);
+  }
+}, [book?.description, searchParams]);
+
 
   const handleSaveClick = useCallback(async () => {
     if (!book) return;
