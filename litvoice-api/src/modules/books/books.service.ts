@@ -19,8 +19,6 @@ export async function getBookService(olid: string) {
       ? raw.covers[0]
       : undefined;
 
-  const rawDescription = raw.description;
-
   const description =
     typeof raw.description === "string"
       ? raw.description
