@@ -33,11 +33,10 @@ export function BookDetail() {
   }, [book?.key]);
 
   useEffect(() => {
-  if (book?.description && searchParams.get("autoplay") === "true") {
-    setPlayerActive(true);
-  }
-}, [book?.description, searchParams]);
-
+    if (book?.description && searchParams.get("autoplay") === "true") {
+      setPlayerActive(true);
+    }
+  }, [book?.description, searchParams]);
 
   const handleSaveClick = useCallback(async () => {
     if (!book) return;
@@ -65,11 +64,11 @@ export function BookDetail() {
 
   const handlePositionChange = useCallback(
     (position: number) => {
-      if (saved && book) {
+      if (saved && book && position > startPosition) {
         void updateSavedBookPosition(book.key, position);
       }
     },
-    [saved, book],
+    [saved, book, startPosition],
   );
 
   useEffect(() => {
@@ -92,9 +91,7 @@ export function BookDetail() {
           try {
             const parsed = JSON.parse(rawMessage) as { message?: unknown };
             setError(
-              typeof parsed.message === "string"
-                ? parsed.message
-                : rawMessage,
+              typeof parsed.message === "string" ? parsed.message : rawMessage,
             );
           } catch {
             setError(rawMessage);
@@ -192,9 +189,7 @@ export function BookDetail() {
               variant="default"
               disabled={!book.description || playerActive}
               title={
-                !book.description
-                  ? "No synopsis available to play"
-                  : undefined
+                !book.description ? "No synopsis available to play" : undefined
               }
               onClick={() => setPlayerActive(true)}
               className="gap-2 text-sm">
