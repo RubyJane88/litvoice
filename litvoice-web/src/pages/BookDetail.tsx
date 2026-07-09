@@ -1,12 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, useSearchParams, Link } from "react-router";
 import { getBook, coverUrl } from "@/lib/books";
 import type { BookDetail as BookDetailType } from "@/lib/books";
 import { BookCardSkeleton } from "@/components/BookCardSkeleton";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { isBookSaved, saveBook, removeBook } from "@/lib/db";
+import {
+  getSavedBook,
+  saveBook,
+  removeBook,
+  updateSavedBookPosition,
+} from "@/lib/db";
 import type { SavedBook } from "@/lib/db";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 export function BookDetail() {
   const { olid } = useParams<{ olid: string }>();
@@ -14,17 +20,28 @@ export function BookDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [playerActive, setPlayerActive] = useState(false);
+  const [startPosition, setStartPosition] = useState(0);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (!book?.key) return;
-    isBookSaved(book.key).then(setSaved);
+    getSavedBook(book.key).then((savedBook) => {
+      setSaved(savedBook !== undefined);
+      setStartPosition(savedBook?.currentPosition ?? 0);
+    });
   }, [book?.key]);
+
+  useEffect(() => {
+    if (book?.description && searchParams.get("autoplay") === "true") {
+      setPlayerActive(true);
+    }
+  }, [book?.description, searchParams]);
 
   const handleSaveClick = useCallback(async () => {
     if (!book) return;
     const nextSaved = !saved;
     setSaved(nextSaved);
-
     try {
       if (!nextSaved) {
         await removeBook(book.key);
@@ -41,9 +58,18 @@ export function BookDetail() {
       }
     } catch (err) {
       console.error("Failed to update reading list:", err);
-      setSaved(saved); // Rollback
+      setSaved(saved);
     }
   }, [book, saved]);
+
+  const handlePositionChange = useCallback(
+    (position: number) => {
+      if (saved && book && position > startPosition) {
+        void updateSavedBookPosition(book.key, position);
+      }
+    },
+    [saved, book, startPosition],
+  );
 
   useEffect(() => {
     if (!olid) return;
@@ -53,43 +79,58 @@ export function BookDetail() {
 
     getBook(olid)
       .then((data) => {
-        if (!cancelled) { setBook(data); setLoading(false); }
+        if (!cancelled) {
+          setBook(data);
+          setLoading(false);
+        }
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Something went wrong.");
-           const rawMessage = err instanceof Error ? err.message : "Something went wrong.";
-           try {
-             const parsed = JSON.parse(rawMessage) as { message?: unknown };
-             setError(typeof parsed.message === "string" ? parsed.message : rawMessage);
-           } catch {
-             setError(rawMessage);
-           }
+          const rawMessage =
+            err instanceof Error ? err.message : "Something went wrong.";
+          try {
+            const parsed = JSON.parse(rawMessage) as { message?: unknown };
+            setError(
+              typeof parsed.message === "string" ? parsed.message : rawMessage,
+            );
+          } catch {
+            setError(rawMessage);
+          }
           setLoading(false);
         }
       });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [olid]);
 
-  if (loading) return (
-    <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
-      <BookCardSkeleton />
-    </main>
-  );
+  if (loading)
+    return (
+      <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+        <BookCardSkeleton />
+      </main>
+    );
 
-  if (error) return (
-    <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-4">
-      <p className="text-sm text-destructive">{error}</p>
-      <Link to="/" className="text-sm text-primary hover:underline">← Back to search</Link>
-    </main>
-  );
+  if (error)
+    return (
+      <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-4">
+        <p className="text-sm text-destructive">{error}</p>
+        <Link to="/" className="text-sm text-primary hover:underline">
+          ← Back to search
+        </Link>
+      </main>
+    );
 
   if (!book) return null;
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
-      <Link to="/" className="text-sm text-primary hover:underline">← Back to search</Link>
+    <main
+      className={`max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6${playerActive ? " pb-24" : ""}`}>
+      <Link to="/" className="text-sm text-primary hover:underline">
+        ← Back to search
+      </Link>
+
       <div className="flex gap-6">
         {book.cover_i ? (
           <img
@@ -103,36 +144,84 @@ export function BookDetail() {
             No cover
           </div>
         )}
+
         <div className="flex flex-col gap-2 flex-1">
-          <h1 className="text-2xl font-bold leading-tight">{book.title}</h1>
+          <h1 className="text-2xl font-heading font-bold leading-tight">
+            {book.title}
+          </h1>
           {book.author_name && (
-            <p className="text-muted-foreground">{book.author_name.join(", ")}</p>
+            <p className="text-muted-foreground">
+              {book.author_name.join(", ")}
+            </p>
           )}
           {book.first_publish_year && (
-            <p className="text-sm text-muted-foreground">First published {book.first_publish_year}</p>
+            <p className="text-sm text-muted-foreground">
+              First published {book.first_publish_year}
+            </p>
           )}
           {book.edition_count && (
-            <p className="text-sm text-muted-foreground">{book.edition_count} editions</p>
+            <p className="text-sm text-muted-foreground">
+              {book.edition_count} editions
+            </p>
           )}
           {book.language && (
             <p className="text-sm text-muted-foreground">
               Languages: {book.language.slice(0, 5).join(", ")}
             </p>
           )}
-          <div className="pt-4">
+
+          <div className="pt-4 flex gap-2 flex-wrap">
             <Button
               type="button"
               variant="secondary"
               onClick={handleSaveClick}
               aria-label={saved ? "Remove from reading list" : "Save for later"}
-              className="gap-2 text-sm"
-            >
-              <Bookmark className="w-4 h-4" fill={saved ? "currentColor" : "none"} />
-              {saved ? "Saved to Reading List" : "Save for Later"}
+              className="gap-2 text-sm">
+              <Bookmark
+                className="w-4 h-4"
+                fill={saved ? "currentColor" : "none"}
+              />
+              {saved ? "Saved" : "Save"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="default"
+              disabled={!book.description || playerActive}
+              title={
+                !book.description ? "No synopsis available to play" : undefined
+              }
+              onClick={() => setPlayerActive(true)}
+              className="gap-2 text-sm">
+              <Play className="w-4 h-4" />
+              {playerActive
+                ? "Playing…"
+                : startPosition > 0
+                  ? "Resume"
+                  : "Play"}
             </Button>
           </div>
         </div>
       </div>
+
+      {book.description && (
+        <div>
+          <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-2">
+            About
+          </p>
+          <p className="text-sm leading-relaxed">{book.description}</p>
+        </div>
+      )}
+
+      {playerActive && book.description && (
+        <AudioPlayer
+          text={book.description}
+          title={book.title}
+          startPosition={startPosition}
+          onPositionChange={handlePositionChange}
+          onClose={() => setPlayerActive(false)}
+        />
+      )}
     </main>
   );
 }

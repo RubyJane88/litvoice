@@ -10,6 +10,7 @@ export async function getBookService(olid: string) {
   const raw = (await getBook(olid)) as {
     covers?: unknown[];
     cover_i?: number;
+    description?: string | { value: string };
     [key: string]: unknown;
   };
 
@@ -18,9 +19,17 @@ export async function getBookService(olid: string) {
       ? raw.covers[0]
       : undefined;
 
+  const description =
+    typeof raw.description === "string"
+      ? raw.description
+      : typeof raw.description?.value === "string"
+        ? raw.description.value
+        : undefined;
+
   const normalized = {
     ...raw,
     cover_i: firstCover ?? raw.cover_i,
+    description,
   };
   return BookSchema.parse(normalized);
 }
