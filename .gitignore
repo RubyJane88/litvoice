@@ -42,3 +42,5 @@ litvoice-web/src/docs/litvoice_request_flow.svg
 infra/.terraform/
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
+infra/.terraform.tfstate.lock.info
+infra/*.tfvars
