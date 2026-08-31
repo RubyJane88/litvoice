@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@daloyjs/core':
-        specifier: ^0.44.0
-        version: 0.44.0
+        specifier: ^1.2.1
+        version: 1.2.1
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -33,9 +33,9 @@ importers:
 
 packages:
 
-  '@daloyjs/core@0.44.0':
-    resolution: {integrity: sha512-9dRlL+AESMG/Q5dhBPAHB3SgFr/pPHt6OSnOXDXdCACN8B2ndnL0kDNsI6pEYRZ9Ziu+C2Fuuf9MuddxYVMkqQ==}
-    engines: {node: '>=24.0.0', pnpm: '>=11.0.0'}
+  '@daloyjs/core@1.2.1':
+    resolution: {integrity: sha512-do8pPNYEMYtftEdDRvV+aZ4bP5+nauSEJJ+gi10pNIdmlwQniYUrT2mHNU1yrUz6acmOy1Oc92rA49NB3bhfww==}
+    engines: {node: ^24.0.0 || >=26.0.0, pnpm: '>=11.0.0'}
     hasBin: true
 
   '@esbuild/aix-ppc64@0.28.1':
@@ -539,7 +539,7 @@ packages:
 
 snapshots:
 
-  '@daloyjs/core@0.44.0': {}
+  '@daloyjs/core@1.2.1': {}
 
   '@esbuild/aix-ppc64@0.28.1':
     optional: true
