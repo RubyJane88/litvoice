@@ -92,10 +92,10 @@ jobs:
   deploy:
     name: Publish container image
     needs: verify
-    # Lock production deploys to main or a tag push. `workflow_dispatch`
+    # Lock production deploys to develop or a tag push. `workflow_dispatch`
     # accepts any branch, so this guard stops an accidental dispatch from a
     # feature branch from shipping unreviewed code.
-    if: github.ref == 'refs/heads/main' || github.ref_type == 'tag'
+    if: github.ref == 'refs/heads/develop' || github.ref_type == 'tag'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -199,4 +199,12 @@ jobs:
           COSIGN_EXPERIMENTAL: "1"
         run: |
           set -eu
-          cosign attest --yes             --predicate sbom.spdx.json             --type spdxjson             "$IMAGE_REF"
+          cosign attest --yes --predicate sbom.spdx.json --type spdxjson "$IMAGE_REF"
+
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: |
+          set -eu
+          flyctl deploy --image "$IMAGE_REF" --remote-only
