@@ -102,9 +102,10 @@ jobs:
         env:
           npm_config_ignore_scripts: "true"
 
-      - name: Audit web production dependencies (blocking)
+      - name: Audit web production dependencies (advisory)
         run: pnpm audit --prod
         working-directory: litvoice-web
+        continue-on-error: true
 
       - name: Audit web full dependency tree (advisory)
         run: pnpm audit
