@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
         with:
           egress-policy: audit
           disable-sudo: true
@@ -58,13 +58,13 @@ jobs:
           show-progress: false
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
         with:
           version: 11.1.3
           run_install: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
         with:
           node-version: 24
           # Package-manager caching is intentionally disabled. Shared caches
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
         with:
           egress-policy: audit
           disable-sudo: true
@@ -171,7 +171,7 @@ jobs:
       - name: Install Cosign
         # SHA-pinned per the project's actions-pinning policy. v4.1.2,
         # commit 6f9f17788090df1f26f669e9d70d6ae9567deba6.
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
 
       - name: Sign image with Cosign (keyless / OIDC)
         # Keyless signing uses the workflow's `id-token` OIDC identity
@@ -186,7 +186,7 @@ jobs:
       - name: Generate SPDX SBOM for image
         # SHA-pinned per the project's actions-pinning policy. v0.24.0,
         # commit e22c389904149dbc22b58101806040fa8d37a610.
-        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
         with:
           image: ${{ env.IMAGE_REF }}
           format: spdx-json
